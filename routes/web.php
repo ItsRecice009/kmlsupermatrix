@@ -52,19 +52,30 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/pegawai/{id}/reset-password', [App\Http\Controllers\PegawaiController::class, 'resetPassword'])->name('admin.pegawai.reset-password');
 });
 
-// API Routes untuk Designators
+// API Routes untuk Designators (dukung /api/... dan /... agar kompatibel di Vercel)
 Route::get('/api/designators', [DesignatorController::class, 'index']);
+Route::get('/designators', [DesignatorController::class, 'index']);
 Route::post('/api/designators', [DesignatorController::class, 'store']);
+Route::post('/designators', [DesignatorController::class, 'store']);
 Route::post('/api/designators/validate', [DesignatorController::class, 'validateDesignators']);
+Route::post('/designators/validate', [DesignatorController::class, 'validateDesignators']);
 Route::put('/api/designators/{id}', [DesignatorController::class, 'update']);
+Route::put('/designators/{id}', [DesignatorController::class, 'update']);
 Route::delete('/api/designators/{id}', [DesignatorController::class, 'destroy']);
+Route::delete('/designators/{id}', [DesignatorController::class, 'destroy']);
 
-// API Routes untuk KML Projects (Data Manager)
+// API Routes untuk KML Projects (dukung /api/... dan /... agar kompatibel di Vercel)
 Route::get('/api/dashboard/stats', [KmlProjectController::class, 'getDashboardStats'])->middleware('auth');
+Route::get('/dashboard/stats', [KmlProjectController::class, 'getDashboardStats'])->middleware('auth');
 Route::get('/api/kml-projects', [KmlProjectController::class, 'index']);
+Route::get('/kml-projects', [KmlProjectController::class, 'index']);
 Route::post('/api/kml-projects', [KmlProjectController::class, 'store']);
+Route::post('/kml-projects', [KmlProjectController::class, 'store']);
 Route::get('/api/kml-projects/{id}', [KmlProjectController::class, 'show']);
+Route::get('/kml-projects/{id}', [KmlProjectController::class, 'show']);
 Route::match(['put', 'post'], '/api/kml-projects/{id}', [KmlProjectController::class, 'update']);
+Route::match(['put', 'post'], '/kml-projects/{id}', [KmlProjectController::class, 'update']);
 Route::delete('/api/kml-projects/{id}', [KmlProjectController::class, 'destroy']);
+Route::delete('/kml-projects/{id}', [KmlProjectController::class, 'destroy']);
 Route::get('/api/kml-projects/{id}/download', [KmlProjectController::class, 'download']);
-
+Route::get('/kml-projects/{id}/download', [KmlProjectController::class, 'download']);

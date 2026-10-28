@@ -23,5 +23,10 @@ if (!file_exists($targetDb) || !file_exists($versionFile) || file_get_contents($
     file_put_contents($versionFile, $currentVersion);
 }
 
+// Fix Vercel script path & HTTPS so Laravel router matches /api routes correctly
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['PHP_SELF'] = '/index.php';
+$_SERVER['HTTPS'] = 'on';
+
 // Forward Vercel requests to Laravel's index.php
 require __DIR__ . '/../public/index.php';
