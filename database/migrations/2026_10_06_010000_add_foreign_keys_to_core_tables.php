@@ -28,22 +28,30 @@ return new class extends Migration
         });
 
         // 3. designators -> admins
-        Schema::table('designators', function (Blueprint $table) {
-            $table->foreignId('admin_id')->nullable()->after('id')
-                ->constrained('admins')->nullOnDelete();
-        });
+        if (!Schema::hasColumn('designators', 'admin_id')) {
+            Schema::table('designators', function (Blueprint $table) {
+                $table->foreignId('admin_id')->nullable()->after('id')
+                    ->constrained('admins')->nullOnDelete();
+            });
+        }
 
         // 4. kml_projects -> pegawai & admins
         Schema::table('kml_projects', function (Blueprint $table) {
-            $table->foreignId('pegawai_id')->nullable()->after('id')
-                ->constrained('pegawai')->nullOnDelete();
-            $table->foreignId('admin_id')->nullable()->after('pegawai_id')
-                ->constrained('admins')->nullOnDelete();
+            if (!Schema::hasColumn('kml_projects', 'pegawai_id')) {
+                $table->foreignId('pegawai_id')->nullable()->after('id')
+                    ->constrained('pegawai')->nullOnDelete();
+            }
+            if (!Schema::hasColumn('kml_projects', 'admin_id')) {
+                $table->foreignId('admin_id')->nullable()->after('pegawai_id')
+                    ->constrained('admins')->nullOnDelete();
+            }
         });
 
-        // 5. Isi data lama berdasarkan kecocokan nama pada kolom created_by
-        DB::statement('UPDATE kml_projects k JOIN pegawai p ON p.name = k.created_by SET k.pegawai_id = p.id WHERE k.pegawai_id IS NULL');
-        DB::statement('UPDATE kml_projects k JOIN admins a ON a.name = k.created_by SET k.admin_id = a.id WHERE k.pegawai_id IS NULL AND k.admin_id IS NULL');
+        // 5. Isi data lama berdasarkan kecocokan nama pada kolom created_by (khusus MySQL)
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement('UPDATE kml_projects k JOIN pegawai p ON p.name = k.created_by SET k.pegawai_id = p.id WHERE k.pegawai_id IS NULL');
+            DB::statement('UPDATE kml_projects k JOIN admins a ON a.name = k.created_by SET k.admin_id = a.id WHERE k.pegawai_id IS NULL AND k.admin_id IS NULL');
+        }
     }
 
     public function down(): void

@@ -12,7 +12,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('sessions')) {
+        if (Schema::hasTable('sessions') && DB::getDriverName() === 'mysql') {
             DB::statement('ALTER TABLE sessions MODIFY user_id VARCHAR(255) NULL');
         }
     }

@@ -22,8 +22,10 @@ return new class extends Migration
             DB::table('users')->update(['is_approved' => true]);
         }
 
-        // 4. Ubah tipe kolom role pada tabel users menjadi ENUM('admin', 'pegawai')
-        DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'pegawai') NOT NULL DEFAULT 'pegawai'");
+        // 4. Ubah tipe kolom role pada tabel users menjadi ENUM('admin', 'pegawai') (khusus MySQL)
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin', 'pegawai') NOT NULL DEFAULT 'pegawai'");
+        }
     }
 
     /**
