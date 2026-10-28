@@ -115,6 +115,6 @@ class KmlProjectSeeder extends Seeder
             );
         }
 
-        $this->command->info('✅ Sample KML projects seeded successfully with multi-month survey dates!');
+        $this->command?->info('✅ Sample KML projects seeded successfully with multi-month survey dates!');
     }
 }

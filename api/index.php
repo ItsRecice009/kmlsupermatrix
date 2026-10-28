@@ -2,7 +2,7 @@
 
 $targetDb = '/tmp/database.sqlite';
 $versionFile = '/tmp/db_version.txt';
-$currentVersion = 'v2_fixed_schema';
+$currentVersion = 'v3_full_data';
 
 if (!file_exists($targetDb) || !file_exists($versionFile) || file_get_contents($versionFile) !== $currentVersion) {
     $sourceDb = __DIR__ . '/../database/database.sqlite';

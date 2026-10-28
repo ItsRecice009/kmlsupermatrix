@@ -440,13 +440,17 @@ class KmlProjectController extends Controller
     public function getDashboardStats(Request $request)
     {
         // 1. Dapatkan daftar tahun unik yang tersedia
+        $isSqlite = DB::getDriverName() === 'sqlite';
+        $surveiRaw = $isSqlite ? "cast(strftime('%Y', tanggal_survei) as integer) as yr" : 'YEAR(tanggal_survei) as yr';
+        $createdRaw = $isSqlite ? "cast(strftime('%Y', created_at) as integer) as yr" : 'YEAR(created_at) as yr';
+
         $yearsFromSurvei = KmlProject::whereNotNull('tanggal_survei')
-            ->selectRaw('YEAR(tanggal_survei) as yr')
+            ->selectRaw($surveiRaw)
             ->distinct()
             ->pluck('yr')
             ->toArray();
 
-        $yearsFromCreated = KmlProject::selectRaw('YEAR(created_at) as yr')
+        $yearsFromCreated = KmlProject::selectRaw($createdRaw)
             ->distinct()
             ->pluck('yr')
             ->toArray();
