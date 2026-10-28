@@ -1,0 +1,39 @@
+flowchart TB
+    %% === AKTOR (atas) ===
+    Pegawai(["👷 Pegawai"])
+    Admin(["👔 Admin"])
+
+    %% === PEWARISAN AKTOR ===
+    Admin -.->|"extends"| Pegawai
+
+    %% === SISTEM ===
+    subgraph SISTEM["Sistem Telkom Akses — KML Super Matrix"]
+        direction LR
+        UC1(["Upload & Proses File KML"])
+        UC2(["Preview & Edit Data"])
+        UC3(["Export / Download Excel & PDF"])
+    end
+
+    subgraph AUTH["Autentikasi Internal"]
+        direction LR
+        UC4(["Login"])
+        UC5(["Logout / Ganti Akun"])
+    end
+
+    subgraph DESIG["Manajemen Designator"]
+        direction LR
+        UC6(["Validasi Designator KML"])
+        UC7(["CRUD Master Designator & Rumus"])
+    end
+
+    subgraph ADM["Admin Panel"]
+        UC8(["Kelola Akun Pegawai (Tambah, Edit, Reset Password, Blokir, Hapus)"])
+    end
+
+    %% === KONEKSI ===
+    Pegawai --> UC1 & UC2 & UC3 & UC4 & UC5 & UC6 & UC7
+    Admin --> UC8
+
+    %% === INCLUDE ===
+    UC6 -.->|"«include»"| UC1
+    UC3 -.->|"«include»"| UC1
